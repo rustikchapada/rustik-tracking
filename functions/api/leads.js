@@ -24,64 +24,78 @@ export async function onRequestGet(context) {
   const botClause = includeBots ? '' : 'AND e.is_bot = 0';
 
   try {
-    const rows = await env.DB.prepare(`
-      SELECT
-        e.event_id,
-        e.timestamp,
-        e.session_id,
-        e.raw_email,
-        e.browser,
-        e.os,
-        e.is_mobile,
-        e.is_bot,
-        e.bot_reason,
-        e.meta_status_code,
-        e.meta_response_ok,
-        e.meta_response_body,
-        e.meta_payload_sent,
-        e.ga4_status_code,
-        e.ga4_response_ok,
-        e.ga4_response_body,
-        e.ga4_payload_sent,
-        e.fbp_source,
-        e.fbc_source,
-        e.fbclid_source,
-        s.utm_source,
-        s.utm_medium,
-        s.utm_campaign,
-        s.utm_content,
-        s.utm_term,
-        s.fbclid,
-        s.gclid,
-        s.referrer,
-        s.landing_url
-      FROM event_log e
-      LEFT JOIN sessions s ON e.session_id = s.session_id
-      WHERE e.event_name = 'Lead'
-        AND e.timestamp >= ?
-        ${botClause}
-      ORDER BY e.timestamp DESC
-      LIMIT ?
-    `).bind(since, limit).all();
+    const [rows, summary, timeSeries, visitsRow] = await Promise.all([
+      env.DB.prepare(`
+        SELECT
+          e.event_id,
+          e.timestamp,
+          e.session_id,
+          e.raw_email,
+          e.browser,
+          e.os,
+          e.is_mobile,
+          e.is_bot,
+          e.bot_reason,
+          e.meta_status_code,
+          e.meta_response_ok,
+          e.meta_response_body,
+          e.meta_payload_sent,
+          e.ga4_status_code,
+          e.ga4_response_ok,
+          e.ga4_response_body,
+          e.ga4_payload_sent,
+          e.fbp_source,
+          e.fbc_source,
+          e.fbclid_source,
+          s.utm_source,
+          s.utm_medium,
+          s.utm_campaign,
+          s.utm_content,
+          s.utm_term,
+          s.fbclid,
+          s.gclid,
+          s.referrer,
+          s.landing_url
+        FROM event_log e
+        LEFT JOIN sessions s ON e.session_id = s.session_id
+        WHERE e.event_name = 'Lead'
+          AND e.timestamp >= ?
+          ${botClause}
+        ORDER BY e.timestamp DESC
+        LIMIT ?
+      `).bind(since, limit).all(),
 
-    // Summary counts grouped by utm_source for the summary card above the table.
-    const summary = await env.DB.prepare(`
-      SELECT
-        COALESCE(NULLIF(s.utm_source, ''), '(direct)') as utm_source,
-        COUNT(*) as count
-      FROM event_log e
-      LEFT JOIN sessions s ON e.session_id = s.session_id
-      WHERE e.event_name = 'Lead'
-        AND e.timestamp >= ?
-        AND e.is_bot = 0
-      GROUP BY utm_source
-      ORDER BY count DESC
-    `).bind(since).all();
+      env.DB.prepare(`
+        SELECT
+          COALESCE(NULLIF(s.utm_source, ''), '(direto)') as utm_source,
+          COUNT(*) as count
+        FROM event_log e
+        LEFT JOIN sessions s ON e.session_id = s.session_id
+        WHERE e.event_name = 'Lead'
+          AND e.timestamp >= ?
+          AND e.is_bot = 0
+        GROUP BY utm_source
+        ORDER BY count DESC
+      `).bind(since).all(),
+
+      env.DB.prepare(`
+        SELECT DATE(timestamp, 'unixepoch') as day, COUNT(*) as leads
+        FROM event_log
+        WHERE event_name = 'Lead' AND timestamp >= ? AND is_bot = 0
+        GROUP BY day ORDER BY day ASC
+      `).bind(since).all(),
+
+      env.DB.prepare(`
+        SELECT COUNT(*) as visits FROM sessions WHERE created_at >= ?
+      `).bind(since).first(),
+    ]);
 
     return json({
       days,
       leads: rows.results || [],
       summary: summary.results || [],
+      time_series: timeSeries.results || [],
+      visits: visitsRow?.visits || 0,
     });
   } catch (err) {
     return json({ error: err.message }, 500);
