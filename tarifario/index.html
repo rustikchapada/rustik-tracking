@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&amp;family=Work+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#F4EEE3;}
+  *{box-sizing:border-box;}
+  a{color:#B25E36;text-decoration:none;}
+  a:hover{color:#8F492A;}
+  .price-row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid #EAE0CE;}
+  .price-row:last-of-type{border-bottom:none;}
+</style>
+</helmet>
+
+<div style="font-family:'Work Sans',sans-serif;background:#F4EEE3;color:#2A241C;min-height:100vh;">
+
+  <div style="position:sticky;top:0;z-index:20;background:#F4EEE3E8;backdrop-filter:blur(4px);border-bottom:1px solid #E6DCC8;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;">
+    <img src="assets/rustik-logo.png" alt="Rustik Chapada" style="height:34px;width:34px;object-fit:contain;">
+    
+  </div>
+
+  <div style="position:relative;height:380px;overflow:hidden;">
+    <sc-for list="{{ heroSlides }}" as="s" hint-placeholder-count="3">
+      <img src="{{ s.img }}" alt="Rustik Chapada" style="{{ s.style }}">
+    </sc-for>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,16,10,0.45) 0%,rgba(20,16,10,0.35) 40%,rgba(15,12,8,0.75) 100%);"></div>
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 24px;">
+      <div style="font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#E8B48C;font-weight:600;margin-bottom:10px;">Tarifário 2026</div>
+      <h1 style="font-family:'Lora',serif;font-size:32px;line-height:1.15;font-weight:600;margin:0 0 12px;color:#fff;">Cinco bangalôs, cada um com a sua diária</h1>
+      <p style="font-size:15px;line-height:1.6;color:#EDE7D8;margin:0;">Valores por noite, para duas pessoas, com café da manhã incluso.</p>
+    </div>
+  </div>
+
+  <div style="max-width:600px;margin:0 auto;padding:20px 20px 8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+    <div style="background:#fff;border:1px solid #E6DCC8;border-radius:10px;padding:14px 8px;text-align:center;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B25E36" stroke-width="1.6" style="margin:0 auto;"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+      <div style="font-size:12px;color:#5B5346;margin-top:8px;line-height:1.4;">Check-in 14h<br>Check-out 11h</div>
+    </div>
+    <div style="background:#fff;border:1px solid #E6DCC8;border-radius:10px;padding:14px 8px;text-align:center;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B25E36" stroke-width="1.6" style="margin:0 auto;"><path d="M4 9h13a1 1 0 011 1 6 6 0 01-6 6H9a6 6 0 01-6-6 1 1 0 011-1z"></path><path d="M17 10h1.5a2.5 2.5 0 010 5H17"></path><path d="M7 3.5c-.6.6-.6 1.2 0 1.8M11 3.5c-.6.6-.6 1.2 0 1.8"></path></svg>
+      <div style="font-size:12px;color:#5B5346;margin-top:8px;line-height:1.4;">Café da manhã<br>incluso</div>
+    </div>
+    <div style="background:#fff;border:1px solid #E6DCC8;border-radius:10px;padding:14px 8px;text-align:center;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B25E36" stroke-width="1.6" style="margin:0 auto;"><path d="M20 14.5A8 8 0 1110.2 4a6.3 6.3 0 009.8 10.5z"></path></svg>
+      <div style="font-size:12px;color:#5B5346;margin-top:8px;line-height:1.4;">Mínimo 2 diárias<br>Feriados: 3</div>
+    </div>
+  </div>
+
+  <div style="max-width:600px;margin:0 auto;padding:28px 20px 8px;display:flex;flex-direction:column;gap:22px;">
+    <sc-for list="{{ bangalos }}" as="b" hint-placeholder-count="5">
+      <div style="background:#fff;border:1px solid #E6DCC8;border-radius:14px;overflow:hidden;">
+        <sc-if value="{{ b.multi }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
+            <sc-for list="{{ b.images }}" as="photo" hint-placeholder-count="4">
+              <img src="{{ photo }}" alt="{{ b.name }}" style="width:100%;height:100px;object-fit:cover;display:block;">
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ b.single }}" hint-placeholder-val="{{ true }}">
+          <img src="{{ b.img }}" alt="{{ b.name }}" style="width:100%;height:200px;object-fit:cover;display:block;">
+        </sc-if>
+        <div style="padding:18px 20px 20px;">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;">
+            <h2 style="font-family:'Lora',serif;font-size:21px;font-weight:600;margin:0;color:#231D14;">{{ b.name }}</h2>
+            <span style="font-size:11px;color:#8A8071;">2 pessoas</span>
+          </div>
+          <div style="margin-top:10px;">
+            <div class="price-row">
+              <span style="font-size:14px;color:#5B5346;">Dia de semana</span>
+              <span style="font-family:'Lora',serif;font-size:19px;font-weight:600;color:#231D14;">R$ {{ b.weekday }}</span>
+            </div>
+            <div class="price-row">
+              <span style="font-size:14px;color:#5B5346;">Fim de semana</span>
+              <span style="font-family:'Lora',serif;font-size:19px;font-weight:600;color:#231D14;">R$ {{ b.weekend }}</span>
+            </div>
+            <div class="price-row">
+              <span style="font-size:14px;color:#5B5346;">Feriados</span>
+              <span style="font-family:'Lora',serif;font-size:19px;font-weight:600;color:#231D14;">R$ {{ b.holiday }}</span>
+            </div>
+          </div>
+          <div style="font-size:12px;color:#8A8071;margin-top:10px;">+ R$ 180 taxa de faxina/lavanderia por estadia</div>
+          <a href="{{ b.link }}" target="_blank" rel="noopener" style="margin-top:14px;display:block;text-align:center;color:#B25E36;font-size:14px;font-weight:600;">Reservar o&nbsp;{{ b.name }}</a>
+          <div style="margin-top:10px;display:flex;gap:10px;">
+            <a href="{{ b.airbnb }}" target="_blank" rel="noopener" style="flex:1;display:flex;align-items:center;justify-content:center;background:#fff;color:#231D14;border:1px solid #E6DCC8;font-size:13px;font-weight:600;padding:11px;border-radius:8px;">Airbnb</a>
+            <a href="{{ b.booking }}" target="_blank" rel="noopener" style="flex:1;display:flex;align-items:center;justify-content:center;background:#fff;color:#231D14;border:1px solid #E6DCC8;font-size:13px;font-weight:600;padding:11px;border-radius:8px;">Booking</a>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="max-width:600px;margin:0 auto;padding:0 20px;">
+    <h3 style="font-family:'Lora',serif;font-size:20px;font-weight:600;margin:0 0 14px;color:#231D14;text-align:center;">Estamos localizados na Chapada dos Veadeiros, a 5 minutos do centro de Alto Paraíso</h3>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3869.2113791745237!2d-47.508363921395734!3d-14.123663051004504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x93457fcb772ce607%3A0x449f06824114e9ab!2sRustik%20Chapada%20%7C%20Charmosos%20Chal%C3%A9s%20para%20Casais%20em%20Alto%20Para%C3%ADso%20na%20Chapada%20dos%20Veadeiros%20%7C%20Pousada!5e0!3m2!1spt-BR!2sbr!4v1788268235854!5m2!1spt-BR!2sbr" width="100%" height="280" style="border:0;border-radius:14px;display:block;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+
+  <div style="background:#1C2018;color:#EDE7D8;margin-top:36px;padding:44px 20px;">
+    <div style="max-width:600px;margin:0 auto;">
+      <div style="font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#C77E52;font-weight:600;margin-bottom:14px;">Condições</div>
+      <h3 style="font-family:'Lora',serif;font-size:22px;font-weight:600;margin:0 0 20px;line-height:1.3;">Antes de reservar</h3>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <sc-for list="{{ conditions }}" as="c" hint-placeholder-count="9">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#C77E52;margin-top:8px;flex-shrink:0;"></span>
+            <span style="font-size:14.5px;line-height:1.6;color:#D6CFBE;">{{ c }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:44px 20px 56px;text-align:center;max-width:600px;margin:0 auto;">
+    <h3 style="font-family:'Lora',serif;font-size:22px;font-weight:600;margin:0 0 10px;color:#231D14;">Alguma dúvida sobre datas ou valores?</h3>
+    <p style="font-size:14.5px;color:#5B5346;margin:0 0 22px;line-height:1.6;">Fala com a gente no WhatsApp e a gente te ajuda a escolher o bangalô certo.</p>
+    <a href="{{ waLink }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;background:#B25E36;color:#fff;font-size:15px;font-weight:600;padding:15px 28px;border-radius:8px;">Falar no WhatsApp</a>
+  </div>
+
+  <div style="border-top:1px solid #E6DCC8;padding:24px 20px;text-align:center;">
+    <img src="assets/rustik-logo.png" alt="Rustik Chapada" style="height:40px;width:40px;object-fit:contain;margin:0 auto 8px;">
+    <div style="font-size:12px;color:#8A8071;">Rustik Chapada · Chapada dos Veadeiros, GO</div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:900},&quot;whatsappLink&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://wa.me/556298713062?text=Ol%C3%A1%2C%20vi%20o%20tarif%C3%A1rio%20e%20gostaria%20de%20fazer%20uma%20reserva...&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contato&quot;}}">
+class Component extends DCLogic {
+  state = { slide: 0 };
+  componentDidMount() {
+    this._timer = setInterval(() => {
+      this.setState(s => ({ slide: (s.slide + 1) % 3 }));
+    }, 3000);
+  }
+  componentWillUnmount() {
+    clearInterval(this._timer);
+  }
+  renderVals() {
+    const heroImgs = ["assets/hero-1.webp", "assets/hero-2.webp", "assets/hero-3.webp"];
+    const heroSlides = heroImgs.map((img, i) => ({
+      img,
+      style: `position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:${i === this.state.slide ? 1 : 0};transition:opacity 1s ease;`
+    }));
+    const base = this.props.whatsappLink || "https://wa.me/556298713062?text=Ol%C3%A1%2C%20vi%20o%20tarif%C3%A1rio%20e%20gostaria%20de%20fazer%20uma%20reserva...";
+    const linkFor = (name) => {
+      const msg = encodeURIComponent(`Olá, vi o tarifário e gostaria de reservar o ${name}.`);
+      const url = new URL(base);
+      url.searchParams.set('text', decodeURIComponent(msg));
+      return url.toString();
+    };
+    const bangalos = [
+      { name: "Bangalô Sol", multi: true, single: false, images: ["assets/sol-1.webp", "assets/sol-2.webp", "assets/sol-3.webp", "assets/sol-4.webp"], weekday: "490,00", weekend: "750,00", holiday: "850,00", link: linkFor("Bangalô Sol"), airbnb: "https://airbnb.com/h/rustiksol", booking: "https://www.booking.com/hotel/br/rustik.pt-br.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaCCIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4AprYwdAGwAIB0gIkMDBiMDkwZjYtYmQ5MS00NTVmLWI2NzEtN2IzZmJiZjQyOTc52AIB4AIB&sid=ffa50bcca435e93ff6e4a238b3c99efc&checkin=2027-01-05&checkout=2027-02-05&dest_id=10132027&dest_type=hotel&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&soh=1&sr_order=popularity&srepoch=1779461169&srpvid=e9d667d7335f01c4&type=total&ucfs=1&#no_availability_msg" },
+      { name: "Bangalô Terra", multi: true, single: false, images: ["assets/terra-1.webp", "assets/terra-2.webp", "assets/terra-3.webp", "assets/terra-4.webp"], weekday: "550,00", weekend: "790,00", holiday: "950,00", link: linkFor("Bangalô Terra"), airbnb: "https://airbnb.com/h/rustikterra", booking: "https://www.booking.com/hotel/br/rustik.pt-pt.html?aid=2311236&label=pt-br-booking-desktop-9_uvqir24qvA6x6xGiDvCQS652828998892%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9198184%3Ali%3Adec%3Adm&sid=60155a27ae57ed939305d5671217c716&dest_id=10132027&dest_type=hotel&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1788267837&srpvid=f3d25bda1de9014b&type=total&ucfs=1&" },
+      { name: "Bangalô Lua", multi: true, single: false, images: ["assets/lua-1.webp", "assets/lua-2.webp", "assets/lua-3.webp", "assets/lua-4.webp"], weekday: "470,00", weekend: "690,00", holiday: "850,00", link: linkFor("Bangalô Lua"), airbnb: "https://airbnb.com/h/rustiklua", booking: "https://www.booking.com/hotel/br/rustik.pt-br.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaCCIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4AprYwdAGwAIB0gIkMDBiMDkwZjYtYmQ5MS00NTVmLWI2NzEtN2IzZmJiZjQyOTc52AIB4AIB&sid=ffa50bcca435e93ff6e4a238b3c99efc&checkin=2027-01-05&checkout=2027-02-05&dest_id=10132027&dest_type=hotel&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&soh=1&sr_order=popularity&srepoch=1779461169&srpvid=e9d667d7335f01c4&type=total&ucfs=1&#no_availability_msg" },
+      { name: "Bangalô Pedra", multi: true, single: false, images: ["assets/pedra-1.webp", "assets/pedra-2.webp", "assets/pedra-3.webp", "assets/pedra-4.webp"], weekday: "490,00", weekend: "750,00", holiday: "850,00", link: linkFor("Bangalô Pedra"), airbnb: "https://www.airbnb.com/h/rustikpedra", booking: "https://www.booking.com/hotel/br/rustik.pt-br.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaCCIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4AprYwdAGwAIB0gIkMDBiMDkwZjYtYmQ5MS00NTVmLWI2NzEtN2IzZmJiZjQyOTc52AIB4AIB&sid=ffa50bcca435e93ff6e4a238b3c99efc&checkin=2027-01-05&checkout=2027-02-05&dest_id=10132027&dest_type=hotel&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&soh=1&sr_order=popularity&srepoch=1779461169&srpvid=e9d667d7335f01c4&type=total&ucfs=1&#no_availability_msg" },
+      { name: "Bangalô Água", multi: true, single: false, images: ["assets/agua-1.webp", "assets/agua-2.webp", "assets/agua-3.webp", "assets/agua-4.webp"], weekday: "550,00", weekend: "790,00", holiday: "950,00", link: linkFor("Bangalô Água"), airbnb: "https://airbnb.com/h/rustikagua", booking: "https://www.booking.com/hotel/br/rustik.pt-br.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaCCIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4AprYwdAGwAIB0gIkMDBiMDkwZjYtYmQ5MS00NTVmLWI2NzEtN2IzZmJiZjQyOTc52AIB4AIB&sid=ffa50bcca435e93ff6e4a238b3c99efc&checkin=2027-01-05&checkout=2027-02-05&dest_id=10132027&dest_type=hotel&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&soh=1&sr_order=popularity&srepoch=1779461169&srpvid=e9d667d7335f01c4&type=total&ucfs=1&#no_availability_msg" }
+    ];
+    const conditions = [
+      "Cesta de café da manhã para duas pessoas incluso na diária.",
+      "Check-in a partir das 14h e check-out até às 11h.",
+      "Hospedagem mínima: 2 diárias. Feriados: 3 diárias.",
+      "Pagamentos: 50% na reserva e 50% dois dias antes do check-in (PIX).",
+      "Taxa de limpeza/lavanderia: R$ 180 por estadia.",
+      "Hóspede adicional (até 1 pessoa a mais nos bangalôs Terra e Água): R$ 250 a diária.",
+      "Não aceitamos pet.",
+      "Valores de feriado não se aplicam a Réveillon, Carnaval e Corpus Christi, que têm tabela própria.",
+      "Alterações ou cancelamentos com menos de 20 dias do check-in, independentemente do motivo, não têm devolução dos 50% pagos na reserva."
+    ];
+    return { bangalos, conditions, waLink: base, heroSlides };
+  }
+}
+</script>
+</body>
+</html>
